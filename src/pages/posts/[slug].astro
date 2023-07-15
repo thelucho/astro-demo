@@ -1,0 +1,68 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const { slug } = Astro.params;
+
+let res = await fetch(`http://localhost:10049/wp-json/wp/v2/posts?slug=${slug}&_embed`)
+let [post] = await res.json();
+
+// The getStaticPaths() is required for static Astro sites.
+// If using SSR, you will not need this function.
+export async function getStaticPaths() {
+  let data = await fetch("http://localhost:10049/wp-json/wp/v2/posts")
+  let posts = await data.json();
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post: post },
+  }));
+}
+---
+<Layout title={post.title.rendered}>
+  <article>
+    <figure>
+      <img src={post._embedded['wp:featuredmedia']['0'].source_url} />
+    </figure>
+    <h1 set:html={post.title.rendered} />
+    <Fragment set:html={post.content.rendered} />
+  </article>
+  <a href="/" class="return">Go to Homepage &rarr;</a>
+</Layout>
+
+<style>
+  article {
+		margin: auto;
+		padding: 1.5rem;
+		max-width: 75ch;
+    color: #333333;
+	}
+	h1 {
+		font-size: 3rem;
+    color: #202020;
+		font-weight: 800;
+    text-align: center;
+		margin: 0;
+	}
+  .return {
+    margin: 50px auto 0;
+    text-decoration: none;
+    width: 192px;
+    height: 40px;
+    border: 2px solid #d4d4d4;
+    color: #838383;
+    border-radius: 8px;
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .return:hover {
+    border-color: #b0abab;
+    color: #6a6a6a;
+    transition: all 0.2s ease-in-out;
+  }
+</style>

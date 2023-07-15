@@ -1,22 +1,21 @@
 ---
 export interface Props {
+  image: string,
 	title: string;
-	body: string;
+	excerpt: string;
 	href: string;
 }
 
-const { href, title, body } = Astro.props;
+const { href, image, title, excerpt } = Astro.props;
 ---
 
 <li class="link-card">
 	<a href={href}>
-		<h2>
-			{title}
-			<span>&rarr;</span>
-		</h2>
-		<p>
-			{body}
-		</p>
+    <figure>
+      <img src={image}>
+    </figure>
+		<h2 set:html={`${title} &rarr;`} />
+		<p set:html={excerpt} />
 	</a>
 </li>
 <style>
@@ -41,7 +40,6 @@ const { href, title, body } = Astro.props;
 		border-radius: 0.35rem;
 		color: #111;
 		background-color: white;
-		opacity: 0.8;
 	}
 	h2 {
 		margin: 0;
@@ -53,6 +51,7 @@ const { href, title, body } = Astro.props;
 		margin-bottom: 0;
 		color: #444;
 	}
+
 	.link-card:is(:hover, :focus-within) {
 		background-position: 0;
 		background-image: var(--accent-gradient);

@@ -1,36 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
+
+const response = await fetch('http://localhost:10049/wp-json/wp/v2/posts?_embed')
+const posts = await response.json()
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout title="Astro + Wordpress API">
 	<main>
-		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
+		<h1>Astro + <span class="text-gradient">Wordpress API</span> = 🚀</h1>
 		<p class="instructions">
-			To get started, open the directory <code>src/pages</code> in your project.<br />
-			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
+			Watch this space for <strong>more exciting</strong> updates from the Vue.js community.  
 		</p>
 		<ul role="list" class="link-card-grid">
-			<Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="https://astro.build/chat/"
-				title="Community"
-				body="Come say hi to our amazing Discord community. ❤️"
-			/>
+
+      {
+        posts.map((post) => (
+          <Card
+            image={post._embedded['wp:featuredmedia']['0'].source_url}
+            href={`/posts/${post.slug}`}
+            title={post.title.rendered}
+            excerpt={post.excerpt.rendered}
+          />
+        ))
+      }
 		</ul>
 	</main>
 </Layout>
@@ -39,12 +32,13 @@ import Card from '../components/Card.astro';
 	main {
 		margin: auto;
 		padding: 1.5rem;
-		max-width: 60ch;
+		max-width: 75ch;
 	}
 	h1 {
 		font-size: 3rem;
 		font-weight: 800;
 		margin: 0;
+    text-align: center;
 	}
 	.text-gradient {
 		background-image: var(--accent-gradient);
@@ -60,6 +54,7 @@ import Card from '../components/Card.astro';
 		background-color: white;
 		padding: 1rem;
 		border-radius: 0.4rem;
+    text-align: center;
 	}
 	.instructions code {
 		font-size: 0.875em;
