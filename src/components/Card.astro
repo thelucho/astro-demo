@@ -12,7 +12,7 @@ const { href, image, title, excerpt } = Astro.props;
 <li class="link-card">
 	<a href={href}>
     <figure>
-      <img src={image}>
+      <img src={image} />
     </figure>
 		<h2 set:html={`${title} &rarr;`} />
 		<p set:html={excerpt} />

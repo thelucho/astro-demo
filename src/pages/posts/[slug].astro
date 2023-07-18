@@ -3,13 +3,13 @@ import Layout from '../../layouts/Layout.astro';
 
 const { slug } = Astro.params;
 
-let res = await fetch(`http://localhost:10049/wp-json/wp/v2/posts?slug=${slug}&_embed`)
+let res = await fetch(`https://ceropixel.com.ar/astro-demo/wp-json/wp/v2/posts?slug=${slug}&_embed`)
 let [post] = await res.json();
 
 // The getStaticPaths() is required for static Astro sites.
 // If using SSR, you will not need this function.
 export async function getStaticPaths() {
-  let data = await fetch("http://localhost:10049/wp-json/wp/v2/posts")
+  let data = await fetch("https://ceropixel.com.ar/astro-demo/wp-json/wp/v2/posts")
   let posts = await data.json();
 
   return posts.map((post) => ({
